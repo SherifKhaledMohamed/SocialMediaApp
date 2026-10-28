@@ -9,6 +9,8 @@ import { NotificationsComponent } from './features/notifications/notifications.c
 import { ChangePasswrodComponent } from './features/change-passwrod/change-passwrod.component';
 import { ForgetPasswordComponent } from './features/forget-password/forget-password.component';
 import { NotfoundComponent } from './features/notfound/notfound.component';
+import { authGuard } from './core/auth/guard/auth-guard';
+import { guestGuard } from './core/auth/guard/guest-guard';
 
 export const routes: Routes = [
     {path:'',redirectTo:'login',pathMatch:'full'},
@@ -16,13 +18,13 @@ export const routes: Routes = [
         {path:'login',component:LoginComponent},
         {path:'register',component:RegisterComponent},
         {path:'forget',component:ForgetPasswordComponent}
-    ]},
+    ],canActivate:[guestGuard]},
     {path:'',component:MainLayoutComponent, children:[
         {path:'profile',component:ProfileComponent},
         {path:'timeline',component:TimelineComponent},
         {path:'notifications',component:NotificationsComponent},
         {path:'change',component:ChangePasswrodComponent}
-    ]},
+    ],canActivate:[authGuard]},
     {path:'notfound',component:NotfoundComponent},
     {path:'**',redirectTo:'notfound',pathMatch:'full'}
 ];

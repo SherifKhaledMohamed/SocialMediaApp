@@ -2,7 +2,7 @@
     <div
         class="container w-full min-h-[655px] p-0 lg:p-5 rounded-2xl shadow-xl bg-white relative overflow-hidden flex flex-col-reverse lg:grid lg:grid-cols-2">
 
-        <div class="panel bg-[url('/img/RegisterBg.jpg')] bg-cover bg-no-repeat w-full relative overflow-hidden lg:rounded-2xl lg:rounded-none lg:overflow-visible lg:absolute lg:top-0 lg:left-0 lg:h-full z-10"
+        <div class="panel bg-[url('/assets/authBg.jpg')] bg-cover bg-no-repeat w-full relative overflow-hidden lg:rounded-2xl lg:rounded-none lg:overflow-visible lg:absolute lg:top-0 lg:left-0 lg:h-full z-10"
             [class.leaving]="leaving" (animationend)="onPanelAnimationEnd($event)">
             <div
                 class="panel-text relative lg:absolute lg:top-0 lg:left-0 w-full lg:w-1/2 lg:h-full p-6 lg:p-4 flex flex-col items-center justify-center gap-3 backdrop-brightness-50 backdrop-blur-xl">
@@ -58,7 +58,7 @@
 
         <div class="form-wrap p-5 lg:p-0 lg:ps-5 lg:col-start-2 w-full lg:h-full grow flex items-center">
             <div class="container flex justify-center w-full h-full items-center lg:grow">
-                <form class="w-full">
+                <form [formGroup]="loginForm" (ngSubmit)="sendLoginData()" class="w-full">
                     <div class="flex flex-col gap-5 justify-center items-start h-full w-full">
                         <div>
                             <h2 class="text-textColor text-2xl lg:text-3xl font-extrabold mb-0.5">Log in to Aura Space
@@ -67,24 +67,72 @@
                                 social journey.</span>
                         </div>
                         <div class="relative w-full">
-                            <input type="text" id="name"
+                            <input type="email" id="email" formControlName="email"
+                                [class]="{'border-green-700' : loginForm.get('email')?.valid,'border-red-700':loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
                                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
                                 placeholder=" " />
-                            <label for="name"
+                            <label for="email"
                                 class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Email
-                                or username...</label>
+                                Address...</label>
                         </div>
+                        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                        <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                            role="alert">
+                            <span class="sr-only">Danger</span>
+                            <div>
+                                <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                    @if(loginForm.get('email')?.hasError('required'))
+                                    {
+                                    <li>Email is required.</li>
+                                    }
+                                    @else if (loginForm.get('email')?.hasError('email')){
+                                    <li>Please enter a valid email address.</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                        }
                         <div class="relative w-full">
-                            <input type="password" id="password"
+                            <input type="password" id="password" formControlName="password"
+                                [class]="{'border-green-700' : loginForm.get('password')?.valid,'border-red-700':loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
                                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
                                 placeholder=" " />
                             <label for="password"
                                 class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Password...</label>
                         </div>
-                        <a
-                            class="bg-mainColor border-2 px-15 py-3 rounded-xl text-white font-bold self-center cursor-pointer w-full text-center hover:border-alternateColor hover:shadow-2xl transition duration-500">
-                            Login
-                        </a>
+                        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                        <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                            role="alert">
+                            <span class="sr-only">Danger</span>
+                            <div>
+                                <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                    @if(loginForm.get('password')?.hasError('required'))
+                                    {
+                                    <li>Password is required.</li>
+                                    }
+                                    @if(loginForm.get('password')?.hasError('pattern'))
+                                    {
+                                    <li>Must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number, and 1 special
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                        }
+
+                        <a routerLink="/forget"
+                            class="text-mainColor underline self-end font-bold cursor-pointer">Forget
+                            password?</a>
+
+                        <button type="submit" [disabled]="loginForm.invalid || isLoading()"
+                            [class.disabled]="loginForm.invalid"
+                            class="bg-mainColor border-2 px-15 py-3 rounded-xl text-white font-bold self-center enabled:cursor-pointer disabled:cursor-not-allowed w-full text-center enabled:hover:border-alternateColor enabled:hover:shadow-2xl transition duration-500 disabled:bg-gray-500">
+                            Login @if (isLoading()) {<span><i class="fas fa-spinner fa-spin"></i></span>}
+                        </button>
+                        @if(msgText() && loginForm.touched) {
+
+                        <span class="text-danger text-xl">{{msgText()}}</span>
+                        }
                     </div>
                 </form>
             </div>

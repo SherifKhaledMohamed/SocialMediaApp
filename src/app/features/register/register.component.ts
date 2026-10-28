@@ -1,6 +1,6 @@
 import { AuthService } from './../../core/auth/services/auth.service';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { validate } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { initFlowbite } from 'flowbite';
@@ -12,20 +12,26 @@ import { initFlowbite } from 'flowbite';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent implements OnInit {
+  private readonly authService = inject(AuthService);
+  private readonly router = new Router;
+  private readonly fb = inject(FormBuilder);
+
+
+
   isLoading= signal(false);
   msgText = signal("");
+  leaving = false;
+
   sendRegisterData() {
     if(this.registerForm.valid){
       this.isLoading.set(true);
       this.authService.signUp(this.registerForm.value).subscribe({
         next: (res)=> {
-          console.log(res);
           if(res.success) {
             this.router.navigate(['/login']);
           }
         },
         error: (err) => {
-          console.log(err);
           this.msgText.set(err.error.message)
           this.isLoading.set(false);
         },
@@ -38,9 +44,17 @@ export class RegisterComponent implements OnInit {
       this.registerForm.markAllAsTouched();
     }
   }
-  private readonly authService = inject(AuthService);
-  private readonly router = new Router;
-  leaving = false;
+
+  confirmPassword(group:AbstractControl) {
+    let password = group.get('password')?.value;
+    let rePassword = group.get('rePassword')?.value
+    if(password !== rePassword) {
+      return {mismatch:true};
+    }
+    else {
+      return null;
+    }
+  }
 
   goToLogin() :void {
     this.leaving = true;
@@ -56,14 +70,14 @@ export class RegisterComponent implements OnInit {
       initFlowbite();
     }
 
-    registerForm = new FormGroup({
-      name: new FormControl("",[Validators.required,Validators.minLength(3)]),
-      username: new FormControl(""),
-      email: new FormControl("",[Validators.required,Validators.email]),
-      dateOfBirth : new FormControl("",[Validators.required]),
-      gender: new FormControl("",Validators.required),
-      password: new FormControl("",[Validators.required,Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)]),
-      rePassword: new FormControl("",[Validators.required,Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)])
-    })
+    registerForm = this.fb.group({
+      name: ["",[Validators.required,Validators.minLength(3)]],
+      username: [""],
+      email: ["",[Validators.required,Validators.email]],
+      dateOfBirth : ["",[Validators.required]],
+      gender: ["",Validators.required],
+      password: ["",[Validators.required,Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)]],
+      rePassword: ["",[Validators.required,Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)]]
+    }, {validators:[this.confirmPassword]})
 
 }
