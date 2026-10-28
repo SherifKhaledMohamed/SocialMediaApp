@@ -1,0 +1,161 @@
+.panel {
+    animation: panel-in-v 0.6s ease-in-out;
+}
+
+.panel.leaving {
+    animation: panel-out-v 0.6s ease-in-out forwards;
+}
+
+.panel-text {
+    animation: text-in-v 0.6s ease-in-out 0.1s both;
+}
+
+.panel.leaving .panel-text {
+    animation: text-out-v 0.6s ease-in-out forwards;
+}
+
+.form-wrap {
+    animation: form-in-v 0.6s ease-in-out both;
+}
+
+@keyframes panel-out-v {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes panel-in-v {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes text-out-v {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}
+
+@keyframes text-in-v {
+    from {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes form-in-v {
+    from {
+        transform: translateY(-30%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+
+@media (min-width: 1024px) {
+    .panel {
+        clip-path: inset(0 50% 0 0 round 0 100px 100px 0);
+        animation: panel-in 0.6s ease-in-out;
+    }
+
+    .panel.leaving {
+        animation: panel-out 0.6s ease-in-out forwards;
+    }
+
+    .panel-text {
+        animation: text-in 0.6s ease-in-out 0.1s both;
+    }
+
+    .panel.leaving .panel-text {
+        animation: text-out 0.6s ease-in-out forwards;
+    }
+
+    .form-wrap {
+        animation: form-in 0.6s ease-in-out both;
+    }
+
+    @keyframes panel-out {
+        from {
+            clip-path: inset(0 50% 0 0 round 0 100px 100px 0);
+        }
+
+        to {
+            clip-path: inset(0 0 0 0 round 0);
+        }
+    }
+
+    @keyframes panel-in {
+        from {
+            clip-path: inset(0 0 0 0 round 0);
+        }
+
+        to {
+            clip-path: inset(0 50% 0 0 round 0 100px 100px 0);
+        }
+    }
+}
+
+
+@keyframes text-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(150%);
+        opacity: 0;
+    }
+}
+
+@keyframes text-in {
+    from {
+        transform: translateX(150%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes form-in {
+    from {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

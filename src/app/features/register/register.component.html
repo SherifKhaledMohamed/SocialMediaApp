@@ -1,0 +1,244 @@
+<section class="min-h-screen flex justify-center items-center p-4 lg:p-0">
+    <div
+        class="container w-full min-h-[655px] p-0 lg:p-5 rounded-2xl shadow-xl bg-white relative overflow-hidden flex flex-col lg:grid lg:grid-cols-2">
+
+        <div class="panel bg-[url('/img/RegisterBg.jpg')] bg-cover bg-no-repeat w-full relative overflow-hidden lg:rounded-2xl lg:rounded-none lg:overflow-visible lg:absolute lg:top-0 lg:left-0 lg:h-full z-10"
+            [class.leaving]="leaving" (animationend)="onPanelAnimationEnd($event)">
+            <div
+                class="panel-text relative lg:absolute lg:top-0 lg:right-0 w-full lg:w-1/2 lg:h-full p-6 lg:p-4 flex flex-col items-center justify-center gap-3 backdrop-brightness-50 backdrop-blur-xl">
+                <h1 class="text-alternateColor text-3xl lg:text-5xl font-extrabold text-center">Aura Space</h1>
+                <span class="text-white text-lg lg:text-2xl font-medium text-center">Connect with friends and the world
+                    around you on Aura Space.</span>
+
+                <div
+                    class="hidden lg:block w-full p-4 border rounded-2xl border-white bg-alternateColor/25 white backdrop-invert backdrop-blur-xl">
+                    <h2 class="text-alternateColor text-sm font-extrabold">About Route Academy</h2>
+                    <span class="text-textColor text-sm font-extrabold">Egypt's Leading IT Training Center Since
+                        2012</span>
+                    <p class="text-sm font-medium text-gray-200">Route Academy is the premier IT training center in
+                        Egypt, established in 2012. We specialize in
+                        delivering high-quality training courses in programming, web development, and application
+                        development. We've identified the unique challenges people may face when learning new technology
+                        and made efforts to provide strategies to overcome them.</p>
+                    <div class="about-cards grid grid-cols-3 gap-3 mt-2">
+                        <div
+                            class="card flex flex-col justify-center items-start rounded-xl border border-mainColor bg-secondColor px-3 py-2">
+                            <span class="font-extrabold text-mainColor text-sm">2012</span>
+                            <span class="font-bold text-textColor text-sm">FOUNDED</span>
+                        </div>
+                        <div
+                            class="card flex flex-col justify-center items-start rounded-xl border border-mainColor bg-secondColor px-3 py-2">
+                            <span class="font-extrabold text-mainColor text-sm">40K+</span>
+                            <span class="font-bold text-textColor text-sm">GRADUATES</span>
+                        </div>
+                        <div
+                            class="card flex flex-col justify-center items-start rounded-xl border border-mainColor bg-secondColor px-3 py-2">
+                            <span class="font-extrabold text-mainColor text-sm">50+</span>
+                            <span class="font-bold text-textColor text-sm">PARTNER COMPANIES</span>
+                        </div>
+                        <div
+                            class="card flex flex-col justify-center items-start rounded-xl border border-mainColor bg-secondColor px-3 py-2">
+                            <span class="font-extrabold text-mainColor text-sm">5</span>
+                            <span class="font-bold text-textColor text-sm">BRANCHES</span>
+                        </div>
+                        <div
+                            class="card flex flex-col justify-center items-start rounded-xl border border-mainColor bg-secondColor px-3 py-2">
+                            <span class="font-extrabold text-mainColor text-sm">20</span>
+                            <span class="font-bold text-textColor text-sm">Diplomas Available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a (click)="goToLogin()"
+                    class="bg-transparent border-2 border-white px-8 lg:px-15 py-3 rounded-xl text-white font-bold self-center cursor-pointer transition duration-500 hover:scale-x-110 hover:bg-alternateColor/50">
+                    Already have an account?
+                </a>
+            </div>
+        </div>
+
+        <div class="form-wrap p-5 lg:p-0 lg:pe-5 w-full lg:h-full">
+            <form [formGroup]="registerForm" (ngSubmit)="sendRegisterData()">
+                <div class="flex flex-col gap-5 justify-center items-start h-full">
+                    <div>
+                        <h2 class="text-textColor text-2xl lg:text-3xl font-extrabold mb-0.5">Create a new account</h2>
+                        <span class="text-lg lg:text-xl text-textColor/50 font-medium">It is quick and easy.</span>
+                    </div>
+                    <div class="relative w-full">
+                        <input type="text" id="name" formControlName="name"
+                            [class]="{'border-green-700' : registerForm.get('name')?.valid,'border-red-700':registerForm.get('name')?.invalid && registerForm.get('name')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" " />
+                        <label for="name"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Full
+                            name...</label>
+                    </div>
+                    @if (registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
+                    <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                        role="alert">
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                @if (registerForm.get('name')?.hasError('required')) {
+                                <li>Full Name is required.</li>
+                                }
+                                @else if (registerForm.get('name')?.hasError('minlength')) {
+                                <li>Name must be at least 3 characters</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+
+                    <div class="relative w-full">
+                        <input type="text" id="username" formControlName="username"
+                            [class]="{'border-green-700' : registerForm.get('username')?.valid,'border-red-700':registerForm.get('username')?.invalid && registerForm.get('name')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" " />
+                        <label for="username"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Username
+                            (optional)...</label>
+                    </div>
+                    <div class="relative w-full">
+                        <input type="email" id="email" formControlName="email"
+                            [class]="{'border-green-700' : registerForm.get('email')?.valid,'border-red-700':registerForm.get('email')?.invalid && registerForm.get('name')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" " />
+                        <label for="email"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Email
+                            Address...</label>
+                    </div>
+                    @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                    <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                        role="alert">
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                @if(registerForm.get('email')?.hasError('required'))
+                                {
+                                <li>Email is required.</li>
+                                }
+                                @else if (registerForm.get('email')?.hasError('email')){
+                                <li>Please enter a valid email address.</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+                    <div class="relative w-full">
+                        <select id="gender" formControlName="gender"
+                            [class]="{'border-green-700' : registerForm.get('gender')?.valid,'border-red-700':registerForm.get('gender')?.invalid && registerForm.get('name')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" ">
+                            <option disabled hidden>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <label for="gender"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Select
+                            Gender...</label>
+                    </div>
+                    @if (registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched) {
+                    <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                        role="alert">
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                @if(registerForm.get('gender')?.hasError('required'))
+                                {
+                                <li>Please select your gender.</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+                    <div class="relative w-full">
+                        <input type="date" id="date" formControlName="dateOfBirth"
+                            [class]="{'border-green-700' : registerForm.get('dateOfBirth')?.valid,'border-red-700':registerForm.get('dateOfBirth')?.invalid && registerForm.get('name')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" " />
+                        <label for="date"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Select
+                            Date...</label>
+                    </div>
+                    @if (registerForm.get('dateOfBirth')?.invalid && registerForm.get('dateOfBirth')?.touched) {
+                    <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                        role="alert">
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                @if(registerForm.get('dateOfBirth')?.hasError('required'))
+                                {
+                                <li>Date of birth is required.</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+                    <div class="relative w-full">
+                        <input type="password" id="password" formControlName="password"
+                            [class]="{'border-green-700' : registerForm.get('password')?.valid,'border-red-700':registerForm.get('password')?.invalid && registerForm.get('name')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" " />
+                        <label for="password"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Password...</label>
+                    </div>
+                    @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+                    <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                        role="alert">
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                @if(registerForm.get('password')?.hasError('required'))
+                                {
+                                <li>Password is required.</li>
+                                }
+                                @if(registerForm.get('password')?.hasError('pattern'))
+                                {
+                                <li>Must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number, and 1 special
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+                    <div class="relative w-full">
+                        <input type="password" id="rePassword" formControlName="rePassword"
+                            [class]="{'border-green-700' : registerForm.get('name')?.valid,'border-red-700':registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched}"
+                            class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border-1 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
+                            placeholder=" " />
+                        <label for="rePassword"
+                            class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Confirm
+                            Password...</label>
+                    </div>
+                    @if (registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched) {
+                    <div class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+                        role="alert">
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                                @if(registerForm.get('rePassword')?.hasError('required'))
+                                {
+                                <li>Please confirm your password.</li>
+                                }
+                                @else if(registerForm.get('Password')?.value !== registerForm.get('rePasswrod')?.value)
+                                {
+                                <li>Passwords do not match.</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+                    <button type="submit" [disabled]="registerForm.invalid || isLoading()"
+                        [class.disabled]="registerForm.invalid"
+                        class="bg-mainColor border-2 px-15 py-3 rounded-xl text-white font-bold self-center cursor-pointer w-full text-center hover:border-alternateColor hover:shadow-2xl transition duration-500 disabled:bg-gray-500">
+                        Create New Account @if (isLoading()) {<span><i class="fas fa-spinner fa-spin"></i></span>}
+                    </button>
+                    @if(msgText() && registerForm.touched) {
+
+                    <span class="text-danger text-xl">{{msgText()}}</span>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
