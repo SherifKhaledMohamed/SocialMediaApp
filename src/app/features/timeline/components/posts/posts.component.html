@@ -1,184 +1,244 @@
 <section>
+  <form
+    (submit)="submitPost($event)"
+    class="w-full bg-white rounded-[16px] shadow-sm border border-slate-200 p-4 font-sans flex flex-col"
+  >
+    <div class="flex items-center gap-3 mb-3">
+      <img
+        [src]="currentuser().photo"
+        [alt]="currentuser().name"
+        class="w-10 h-10 rounded-full object-cover shrink-0 bg-slate-100 border border-slate-50"
+      />
 
-    <form (submit)="submitPost($event)"
-        class="w-full bg-white rounded-[16px] shadow-sm border border-slate-200 p-4 font-sans flex flex-col">
-        <div class="flex items-center gap-3 mb-3">
-            <img [src]="currentuser().photo" [alt]="currentuser().name"
-                class="w-10 h-10 rounded-full object-cover shrink-0 bg-slate-100 border border-slate-50" />
+      <div>
+        <span class="text-[15px] font-bold text-slate-900 leading-tight">{{
+          currentuser().name
+        }}</span>
 
-            <div>
-                <span class="text-[15px] font-bold text-slate-900 leading-tight">{{currentuser().name}}</span>
+        <div
+          class="flex p-1 w-fit items-center bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
+        >
+          <i class="fa-solid fa-earth-americas text-[11px] text-slate-600"></i>
 
-                <div
-                    class="flex p-1 w-fit items-center bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
-                    <i class="fa-solid fa-earth-americas text-[11px] text-slate-600"></i>
-
-                    <select class="inline-20 border-none bg-transparent cursor-pointer ring-0 py-0 px-2 text-xs"
-                        [formControl]="postPrivacy">
-                        <option value="public">public</option>
-                        <option value="following">followers</option>
-                        <option value="only_me">only me</option>
-                    </select>
-                </div>
-            </div>
+          <select
+            class="inline-20 border-none bg-transparent cursor-pointer ring-0 py-0 px-2 text-xs"
+            [formControl]="postPrivacy"
+          >
+            <option value="public">public</option>
+            <option value="following">followers</option>
+            <option value="only_me">only me</option>
+          </select>
         </div>
-
-        <div class="mb-4">
-            <textarea [formControl]="postBody"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-300 transition-all resize-y min-h-30"
-                placeholder="What's on your mind...?" aria-label="Create a new post"></textarea>
-        </div>
-
-        @if (imgSrc()) {
-        <div class="mb-4 h-[250px] w-full relative overflow-hidden rounded-2xl">
-            <img [src]="imgSrc()" class="w-full h-full  object-cover">
-            <span (click)="imgSrc.set('')"
-                class="h-[20px] w-[20px] rounded-full bg-gray/50 backdrop-blur-md absolute top-[15px] right-[15px] z-10 flex items-center justify-center cursor-pointer hover:translate-y-[-4px] hover:border  transition duration-300"><i
-                    class="fa-regular fa-circle-xmark text-white"></i></span>
-        </div>
-        }
-
-        <hr class="border-t border-slate-800 mb-4" />
-
-        <div class="flex items-center justify-between">
-            <input type="file" id="file" class="hidden" (change)="changePhoto($event)" />
-            <label for="file"
-                class="flex cursor-pointer items-center gap-2 text-slate-600 hover:bg-slate-50 px-2 py-1.5 rounded-lg transition-colors group">
-                <i
-                    class="fa-regular fa-image text-[#22c55e] text-[1.1rem] group-hover:scale-110 transition-transform"></i>
-                <span class="text-[14px] font-semibold text-slate-600">Photo/video</span>
-            </label>
-
-            <button [disabled]="postBody.invalid" [class.disabled]="postBody.invalid"
-                class="cursor-pointer bg-blue-500 text-white px-5 py-2 rounded-lg font-bold text-[14px] flex items-center gap-2 focus:ring-4 focus:ring-blue-200 outline-none hover:shadow-sm hover:scale-x-[105%] transition-all duration-200 disabled:cursor-not-allowed disabled:bg-gray-400">
-                Post
-                <i class="fa-regular fa-paper-plane text-sm"></i>
-            </button>
-        </div>
-    </form>
-
-
-
-    @for (post of allPosts(); track post._id) {
-    <div class="bg-white rounded-[16px] my-3 shadow-sm border border-slate-200 p-4 font-sans">
-        <!-- user details  -->
-        <div class="flex items-start justify-between mb-3">
-            <div class="flex items-center gap-3">
-                <img src="{{post.user.photo}}" alt="{{post.user.name}}"
-                    class="size-10 rounded-full object-cover shrink-0 bg-slate-100 border border-slate-50" />
-
-                <div>
-                    <span
-                        class="text-[15px] font-bold text-slate-900 leading-tight hover:underline cursor-pointer">{{post.user.name}}</span>
-                    <div class="flex items-center text-[13px] text-slate-500 mt-0.5 gap-1">
-                        <span class="hover:underline cursor-pointer">{{post.user.username}}</span>
-                        <span>&middot;</span>
-                        <span class="hover:underline cursor-pointer">{{post.createdAt}}</span>
-                        <span>&middot;</span>
-
-                        <div
-                            class="p-0 w-fit items-center bg-neutral-secondary-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
-                            <select [disabled]="post.user._id !== currentuserId()"
-                                class="inline-20 border-none bg-transparent cursor-pointer ring-0 py-0 px-2 text-xs">
-                                <option [selected]="post.privacy === 'public'" value="public">public</option>
-                                <option [selected]="post.privacy === 'followers'" value="following">followers</option>
-                                <option [selected]="post.privacy === 'only_me'" value="only_me">only me</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative group">
-                <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots"
-                    class="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm p-2 focus:outline-none"
-                    type="button">
-                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-width="3"
-                            d="M12 6h.01M12 12h.01M12 18h.01" />
-                    </svg>
-                </button>
-
-                <!-- Dropdown menu -->
-                <div id="dropdownDots"
-                    class="z-30 hidden group-hover:block absolute bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
-                    <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdownMenuIconButton">
-                        <li>
-                            <button
-                                class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
-                                Save Post
-                            </button>
-                            @if(post.user._id === currentuserId()) {
-                            <button
-                                class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
-                                Edit post
-                            </button>
-                            }
-
-                            @if(post.user._id === currentuserId()) {
-                            <button (click)="deletePostData(post._id)"
-                                class="inline-flex text-red-700 items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
-                                Delete post
-                            </button>
-                            }
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- post content  -->
-        <div class="text-[15px] text-slate-900 mb-4">
-            @if(post.body) {
-            <p>{{post.body}}</p>
-            }
-            @if (post.image) {
-            <img src="{{post.image}}" class="w-full max-h-90 object-cover rounded shadow mt-2" alt="{{post.body}}" />
-            }
-        </div>
-
-        <!-- like share comments  counts & view details -->
-        <div class="flex items-center justify-between text-[13px] text-slate-500 mb-3 px-1">
-            <div class="flex items-center gap-1.5 cursor-pointer hover:underline">
-                <div class="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xs">
-                    <i class="fa-solid fa-thumbs-up"></i>
-                </div>
-                <span>{{post.likesCount}} likes</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <span class="cursor-pointer hover:underline">{{post.sharesCount}} shares</span>
-                <span class="cursor-pointer hover:underline">{{post.commentsCount}} comments</span>
-                <button class="font-semibold cursor-pointer text-blue-600 hover:underline">
-                    View details
-                </button>
-            </div>
-        </div>
-
-        <hr class="border-t border-slate-200 mb-1" />
-
-        <!-- buttons like - comment - share -->
-        <div class="flex items-center justify-between px-1 py-1">
-            <button
-                class="flex-1 cursor-pointer flex items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors">
-                <i class="fa-regular fa-thumbs-up text-lg"></i>
-                Like
-            </button>
-            <button
-                class="flex-1 flex cursor-pointer items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors">
-                <i class="fa-regular fa-message text-lg"></i>
-                Comment
-            </button>
-            <button
-                class="flex-1 flex cursor-pointer items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors">
-                <i class="fa-solid fa-share text-lg"></i>
-                Share
-            </button>
-        </div>
-
-        <hr class="border-t border-slate-200 mt-1 mb-4" />
-
-
+      </div>
     </div>
+
+    <div class="mb-4">
+      <textarea
+        [formControl]="postBody"
+        class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-300 transition-all resize-y min-h-30"
+        placeholder="What's on your mind...?"
+        aria-label="Create a new post"
+      ></textarea>
+    </div>
+
+    @if (imgSrc()) {
+      <div class="mb-4 h-62.5 w-full relative overflow-hidden rounded-2xl">
+        <img [src]="imgSrc()" class="w-full h-full object-cover" />
+        <span
+          (click)="imgSrc.set('')"
+          class="h-5 w-5 rounded-full bg-gray/50 backdrop-blur-md absolute top-3.75 right-3.75 z-10 flex items-center justify-center cursor-pointer hover:-translate-y-1 hover:border transition duration-300"
+          ><i class="fa-regular fa-circle-xmark text-white"></i
+        ></span>
+      </div>
     }
+
+    <hr class="border-t border-slate-800 mb-4" />
+
+    <div class="flex items-center justify-between">
+      <input type="file" id="file" class="hidden" (change)="changePhoto($event)" />
+      <label
+        for="file"
+        class="flex cursor-pointer items-center gap-2 text-slate-600 hover:bg-slate-50 px-2 py-1.5 rounded-lg transition-colors group"
+      >
+        <i
+          class="fa-regular fa-image text-[#22c55e] text-[1.1rem] group-hover:scale-110 transition-transform"
+        ></i>
+        <span class="text-[14px] font-semibold text-slate-600">Photo/video</span>
+      </label>
+
+      <button
+        [disabled]="postBody.invalid"
+        [class.disabled]="postBody.invalid"
+        class="cursor-pointer bg-blue-500 text-white px-5 py-2 rounded-lg font-bold text-[14px] flex items-center gap-2 focus:ring-4 focus:ring-blue-200 outline-none hover:shadow-sm hover:scale-x-105 transition-all duration-200 disabled:cursor-not-allowed disabled:bg-gray-400"
+      >
+        Post
+        <i class="fa-regular fa-paper-plane text-sm"></i>
+      </button>
+    </div>
+  </form>
+
+  @for (post of allPosts(); track post._id) {
+    <div class="bg-white rounded-[16px] my-3 shadow-sm border border-slate-200 p-4 font-sans">
+      <!-- user details  -->
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <img
+            src="{{ post.user.photo }}"
+            alt="{{ post.user.name }}"
+            class="size-10 rounded-full object-cover shrink-0 bg-slate-100 border border-slate-50"
+          />
+
+          <div>
+            <span
+              class="text-[15px] font-bold text-slate-900 leading-tight hover:underline cursor-pointer"
+              >{{ post.user.name }}</span
+            >
+            <div class="flex items-center text-[13px] text-slate-500 mt-0.5 gap-1">
+              <span class="hover:underline cursor-pointer">{{ post.user.username }}</span>
+              <span>&middot;</span>
+              <span class="hover:underline cursor-pointer">{{ post.createdAt }}</span>
+              <span>&middot;</span>
+
+              <div
+                class="p-0 w-fit items-center bg-neutral-secondary-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
+              >
+                <select
+                  [disabled]="post.user._id !== currentuserId()"
+                  class="inline-20 border-none bg-transparent cursor-pointer ring-0 py-0 px-2 text-xs"
+                >
+                  <option [selected]="post.privacy === 'public'" value="public">public</option>
+                  <option [selected]="post.privacy === 'followers'" value="following">
+                    followers
+                  </option>
+                  <option [selected]="post.privacy === 'only_me'" value="only_me">only me</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <button
+            id="dropdownMenuIconButton"
+            data-dropdown-toggle="dropdownDots"
+            class="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm p-2 focus:outline-none"
+            type="button"
+          >
+            <svg
+              class="w-6 h-6"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="3"
+                d="M12 6h.01M12 12h.01M12 18h.01"
+              />
+            </svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            id="dropdownDots"
+            class="z-30 hidden group-hover:block absolute bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44"
+          >
+            <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdownMenuIconButton">
+              <li>
+                <button
+                  class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                >
+                  Save Post
+                </button>
+                @if (post.user._id === currentuserId()) {
+                  <button
+                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                  >
+                    Edit post
+                  </button>
+                }
+
+                @if (post.user._id === currentuserId()) {
+                  <button
+                    (click)="deletePostData(post._id)"
+                    class="inline-flex text-red-700 items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                  >
+                    Delete post
+                  </button>
+                }
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- post content  -->
+      <div class="text-[15px] text-slate-900 mb-4">
+        @if (post.body) {
+          <p>{{ post.body }}</p>
+        }
+        @if (post.image) {
+          <img
+            src="{{ post.image }}"
+            class="w-full max-h-90 object-cover rounded shadow mt-2"
+            alt="{{ post.body }}"
+          />
+        }
+      </div>
+
+      <!-- like share comments  counts & view details -->
+      <div class="flex items-center justify-between text-[13px] text-slate-500 mb-3 px-1">
+        <div class="flex items-center gap-1.5 cursor-pointer hover:underline">
+          <div
+            class="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xs"
+          >
+            <i class="fa-solid fa-thumbs-up"></i>
+          </div>
+          <span>{{ post.likesCount }} likes</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="cursor-pointer hover:underline">{{ post.sharesCount }} shares</span>
+          <span class="cursor-pointer hover:underline">{{ post.commentsCount }} comments</span>
+          <button class="font-semibold cursor-pointer text-blue-600 hover:underline">
+            View details
+          </button>
+        </div>
+      </div>
+
+      <hr class="border-t border-slate-200 mb-1" />
+
+      <!-- buttons like - comment - share -->
+      <div class="flex items-center justify-between px-1 py-1">
+        <button
+          class="flex-1 cursor-pointer flex items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors"
+        >
+          <i class="fa-regular fa-thumbs-up text-lg"></i>
+          Like
+        </button>
+        <button
+          #commBtnEl
+          class="flex-1 flex cursor-pointer items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors"
+        >
+          <i class="fa-regular fa-message text-lg"></i>
+          Comment
+        </button>
+        <button
+          class="flex-1 flex cursor-pointer items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors"
+        >
+          <i class="fa-solid fa-share text-lg"></i>
+          Share
+        </button>
+      </div>
+
+      <hr class="border-t border-slate-200 mt-1 mb-4" />
+
+      @defer (on interaction(commBtnEl)) {
+        <app-comment [postId]="post._id"></app-comment>
+      }
+    </div>
+  }
 </section>
