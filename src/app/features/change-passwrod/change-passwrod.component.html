@@ -1,1 +1,143 @@
-<p>change-passwrod works!</p>
+<section>
+  <div
+    class="container w-1/2 bg-white border-gray-700 shadow-xl mt-3.75 p-6 rounded-xl flex flex-col gap-4 justify-center items-stretch"
+  >
+    <div class="header flex justify-start items-center gap-4">
+      <span class="bg-[#e7f3ff] text-alternateColor p-2 rounded-full w-10 h-10"
+        ><i class="fa-solid fa-key text-xl"></i
+      ></span>
+      <div class="">
+        <h2 class="font-extrabold text-2xl">Change Password</h2>
+        <p>Keep your account secure by using a strong password.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="changeForm" (ngSubmit)="sendPasswordData()">
+      <div class="mb-6">
+        <label for="currentpassword" class="block mb-2.5 text-sm font-medium text-heading"
+          >Current Password</label
+        >
+        <input
+          formControlName="password"
+          type="password"
+          id="currentpassword"
+          class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+          placeholder="Enter current password"
+          required
+        />
+      </div>
+      @if (changeForm.get('password')?.invalid && changeForm.get('password')?.touched) {
+        <div
+          class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+          role="alert"
+        >
+          <span class="sr-only">Danger</span>
+          <div>
+            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+              @if (changeForm.get('password')?.hasError('required')) {
+                <li>Password is required.</li>
+              }
+              @if (changeForm.get('password')?.hasError('pattern')) {
+                <li>
+                  Must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number, and 1 special
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+      <div class="mb-6">
+        <label for="newpassword" class="block mb-2.5 text-sm font-medium text-heading"
+          >New Password</label
+        >
+        <input
+          formControlName="newPassword"
+          type="password"
+          id="newpassword"
+          class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+          placeholder="Enter new password"
+          required
+        />
+      </div>
+      @if (changeForm.get('newPassword')?.invalid && changeForm.get('newPassword')?.touched) {
+        <div
+          class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+          role="alert"
+        >
+          <span class="sr-only">Danger</span>
+          <div>
+            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+              @if (changeForm.get('newPassword')?.hasError('required')) {
+                <li>Password is required.</li>
+              }
+              @if (changeForm.get('newPassword')?.hasError('pattern')) {
+                <li>
+                  Must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number, and 1 special
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+      <div class="mb-6">
+        <label for="confirmnewpassword" class="block mb-2.5 text-sm font-medium text-heading"
+          >Confirm New Password</label
+        >
+        <input
+          formControlName="reNewPassword"
+          type="password"
+          id="confirmnewpassword"
+          class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+          placeholder="Re-enter new password"
+          required
+        />
+      </div>
+
+      @if (changeForm.get('reNewPassword')?.invalid && changeForm.get('reNewPassword')?.touched) {
+        <div
+          class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+          role="alert"
+        >
+          <span class="sr-only">Danger</span>
+          <div>
+            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+              @if (changeForm.get('reNewPassword')?.hasError('required')) {
+                <li>Password is required</li>
+              } @else if (changeForm.hasError('mismatch')) {
+                <li>Passwords do not match.</li>
+              }
+            </ul>
+          </div>
+        </div>
+      } @else if (changeForm.hasError('mismatch') && changeForm.get('reNewPassword')?.touched) {
+        <div
+          class="flex w-full p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
+          role="alert"
+        >
+          <span class="sr-only">Danger</span>
+          <div>
+            <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+              <li>Passwords do not match.</li>
+            </ul>
+          </div>
+        </div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="changeForm.invalid || isLoading()"
+        [class.disabled]="changeForm.invalid"
+        class="text-white w-full bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none enabled:cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-500"
+      >
+        Update Password
+        @if (isLoading()) {
+          <span><i class="fas fa-spinner fa-spin"></i></span>
+        }
+      </button>
+
+      @if (msgText() && changeForm.touched) {
+        <span class="text-danger text-xl">{{ msgText() }}</span>
+      }
+    </form>
+  </div>
+</section>

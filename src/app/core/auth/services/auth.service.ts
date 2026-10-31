@@ -11,15 +11,24 @@ export class AuthService {
   private readonly httpClient = inject(HttpClient);
   private readonly router = inject(Router);
 
-  signUp(data:object):Observable<any> {
-    return this.httpClient.post( environment.baseUrl + "users/signup",data);
+  signUp(data: object): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + 'users/signup', data);
   }
-  signIn(data:object):Observable<any> {
-    return this.httpClient.post(environment.baseUrl +  "users/signin",data);
+  signIn(data: object): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + 'users/signin', data);
   }
-  signOut():void {
+  signOut(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
+  }
+  getSuggestedFriends(): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + 'users/suggestions');
+  }
+  followUser(userId: string): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + `users/${userId}/follow`, null);
+  }
+  changePassword(data: object): Observable<any> {
+    return this.httpClient.patch(environment.baseUrl + `users/change-password`, data);
   }
 }

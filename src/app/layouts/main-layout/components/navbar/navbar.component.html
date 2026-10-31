@@ -1,67 +1,137 @@
-<nav class="bg-neutral-primary w-full z-20 top-0 start-0 border-b border-default">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
-        <a class="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer" routerLink="timeline">
-            <img src="assets/auraIcon.jpg" class="h-8 rounded" alt="Aura Space Logo" />
-            <span class="self-center text-xl text-heading font-semibold whitespace-nowrap">Aura Space</span>
-        </a>
+<nav class="bg-neutral-primary w-full z-20 top-0 inset-s-0 border-b border-default">
+  <div class="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-2">
+    <a class="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer" routerLink="timeline">
+      <img src="assets/auraIcon.jpg" class="h-8 rounded" alt="Aura Space Logo" />
+      <span class="self-center text-xl text-heading font-semibold whitespace-nowrap"
+        >Aura Space</span
+      >
+    </a>
 
-        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button type="button"
-                class="flex text-sm bg-neutral-primary rounded-full md:me-0 focus:ring-4 focus:ring-neutral-tertiary"
-                id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
-                data-dropdown-placement="bottom">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="/assets/default-profile.png" alt="user photo" />
-            </button>
-            <!-- Dropdown menu -->
-            <div class="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44"
-                id="user-dropdown">
-                <div class="px-4 py-3 text-sm border-b border-default">
-                    <span class="block text-heading font-medium">User Name</span>
-                </div>
-                <ul class="p-2 text-sm text-body font-medium" aria-labelledby="user-menu-button">
-                    <li>
-                        <a routerLink="/change" routerLinkActive="bg-neutral-tertiary-medium"
-                            class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
-                            <i class="fa-solid fa-gear"></i> Settings</a>
-                    </li>
-
-                    <li>
-                        <a (click)="logOut()"
-                            class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">LogOut</a>
-                    </li>
-                </ul>
-            </div>
-            <button data-collapse-toggle="navbar-user" type="button"
-                class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
-                aria-controls="navbar-user" aria-expanded="false">
-                <span class="sr-only">Open main menu</span>
-                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14" />
-                </svg>
-            </button>
+    <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <button
+        type="button"
+        class="flex justify-center items-center w-fit h-fit p-2 border-[#eaeff5] text-sm bg-[#f8fafc] rounded-full md:me-0 focus:ring-4 focus:ring-neutral-tertiary"
+        id="user-menu-button"
+        aria-expanded="false"
+        data-dropdown-toggle="user-dropdown"
+        data-dropdown-placement="bottom"
+      >
+        <span class="sr-only">Open user menu</span>
+        <div class="flex justify-center items-center">
+          <img
+            class="w-8 h-8 rounded-full"
+            [src]="currentUser().photo"
+            [alt]="currentUser().name"
+          />
+          <span class="mx-1 text-md hidden lg:block"
+            >{{ currentUser().name }} <i class="fa-solid fa-bars translate-y-[25%]"></i
+          ></span>
         </div>
-
-        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
-            <ul
-                class="font-medium flex flex-col p-4 md:p-1.5 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:bg-secondColor/60">
-                <li>
-                    <a routerLink="/feed" routerLinkActive="bg-white text-mainColor"
-                        class="block py-2 px-3 text-gray-600 rounded md:p-1" aria-current="page">
-                        <i class="fa-regular fa-house"></i> Feed</a>
-                </li>
-                <li>
-                    <a routerLink="/profile" routerLinkActive="bg-white text-mainColor"
-                        class="block py-2 px-3 text-gray-600 rounded md:p-1" aria-current="page">
-                        <i class="fa-regular fa-user"></i> Profile</a>
-                </li>
-                <li>
-                    <a routerLink="/notification" routerLinkActive="bg-white text-mainColor"
-                        class="block py-2 px-3 text-gray-600 rounded md:p-1" aria-current="page">
-                        <i class="fa-regular fa-comment"></i> Notification</a>
-                </li>
-            </ul>
+      </button>
+      <!-- Dropdown menu -->
+      <div
+        class="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44"
+        id="user-dropdown"
+      >
+        <div class="px-4 py-3 text-sm border-b border-default">
+          <span class="block text-heading font-medium">{{ currentUser().name }}</span>
         </div>
+        <ul class="p-2 text-sm text-body font-medium" aria-labelledby="user-menu-button">
+          <li class="cursor-pointer">
+            <a
+              routerLink="/profile"
+              routerLinkActive="bg-neutral-tertiary-medium"
+              class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+            >
+              <i class="fa-solid fa-user me-2"></i> Profile</a
+            >
+          </li>
+          <li class="cursor-pointer">
+            <a
+              routerLink="/change"
+              routerLinkActive="bg-neutral-tertiary-medium"
+              class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+            >
+              <i class="fa-solid fa-gear me-2"></i> Settings</a
+            >
+          </li>
+
+          <hr class="mt-0.5" />
+
+          <li class="cursor-pointer">
+            <a
+              (click)="logOut()"
+              class="inline-flex items-center w-full p-2 text-red-500 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+      <button
+        data-collapse-toggle="navbar-user"
+        type="button"
+        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
+        aria-controls="navbar-user"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Open main menu</span>
+        <svg
+          class="w-6 h-6"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="2"
+            d="M5 7h14M5 12h14M5 17h14"
+          />
+        </svg>
+      </button>
     </div>
+
+    <div
+      class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+      id="navbar-user"
+    >
+      <ul
+        class="font-medium flex flex-col p-4 md:p-1.5 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:bg-secondColor/60"
+      >
+        <li>
+          <a
+            routerLink="/timeline"
+            routerLinkActive="bg-white text-red-400 shadow-md"
+            class="block py-2 px-3 text-gray-600 rounded md:p-1"
+            aria-current="page"
+          >
+            <i class="fa-regular fa-house"></i> Feed</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/profile"
+            routerLinkActive="bg-white text-red-400 shadow-md"
+            class="block py-2 px-3 text-gray-600 rounded md:p-1"
+            aria-current="page"
+          >
+            <i class="fa-regular fa-user"></i> Profile</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/notifications"
+            routerLinkActive="bg-white text-red-400 shadow-md"
+            class="block py-2 px-3 text-gray-600 rounded md:p-1"
+            aria-current="page"
+          >
+            <i class="fa-regular fa-comment"></i> Notification</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

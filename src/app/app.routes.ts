@@ -11,20 +11,32 @@ import { ForgetPasswordComponent } from './features/forget-password/forget-passw
 import { NotfoundComponent } from './features/notfound/notfound.component';
 import { authGuard } from './core/auth/guard/auth-guard';
 import { guestGuard } from './core/auth/guard/guest-guard';
+import { DetailsComponent } from './features/details/details.component';
 
 export const routes: Routes = [
-    {path:'',redirectTo:'login',pathMatch:'full'},
-    {path:'',component:AuthLayoutComponent, children:[
-        {path:'login',component:LoginComponent},
-        {path:'register',component:RegisterComponent},
-        {path:'forget',component:ForgetPasswordComponent}
-    ],canActivate:[guestGuard]},
-    {path:'',component:MainLayoutComponent, children:[
-        {path:'profile',component:ProfileComponent},
-        {path:'timeline',component:TimelineComponent},
-        {path:'notifications',component:NotificationsComponent},
-        {path:'change',component:ChangePasswrodComponent}
-    ],canActivate:[authGuard]},
-    {path:'notfound',component:NotfoundComponent},
-    {path:'**',redirectTo:'notfound',pathMatch:'full'}
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'forget', component: ForgetPasswordComponent },
+    ],
+    canActivate: [guestGuard],
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'profile', component: ProfileComponent },
+      { path: 'timeline', component: TimelineComponent },
+      { path: 'notifications', component: NotificationsComponent },
+      { path: 'change', component: ChangePasswrodComponent },
+      { path: 'details/:id', component: DetailsComponent },
+    ],
+    canActivate: [authGuard],
+  },
+  { path: 'notfound', component: NotfoundComponent },
+  { path: '**', redirectTo: 'notfound', pathMatch: 'full' },
 ];

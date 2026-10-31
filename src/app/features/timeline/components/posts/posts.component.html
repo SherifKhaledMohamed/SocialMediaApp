@@ -1,6 +1,6 @@
 <section>
   <form
-    (submit)="submitPost($event)"
+    (submit)="editOrSubmitPost($event, postImgInput)"
     class="w-full bg-white rounded-[16px] shadow-sm border border-slate-200 p-4 font-sans flex flex-col"
   >
     <div class="flex items-center gap-3 mb-3">
@@ -55,7 +55,7 @@
     <hr class="border-t border-slate-800 mb-4" />
 
     <div class="flex items-center justify-between">
-      <input type="file" id="file" class="hidden" (change)="changePhoto($event)" />
+      <input type="file" id="file" class="hidden" (change)="changePhoto($event)" #postImgInput />
       <label
         for="file"
         class="flex cursor-pointer items-center gap-2 text-slate-600 hover:bg-slate-50 px-2 py-1.5 rounded-lg transition-colors group"
@@ -117,6 +117,11 @@
           </div>
         </div>
 
+        @if (post.bookmarked) {
+          <span class="flex justify-center items-center self-center ms-auto mb-0.5"
+            ><i class="fa-solid fa-heart text-red-500 text-md"></i
+          ></span>
+        }
         <div class="relative group">
           <button
             id="dropdownMenuIconButton"
@@ -150,12 +155,18 @@
             <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdownMenuIconButton">
               <li>
                 <button
+                  (click)="switchBookmark(post._id)"
                   class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                 >
-                  Save Post
+                  @if (post.bookmarked) {
+                    Unsave Post
+                  } @else {
+                    Save Post
+                  }
                 </button>
                 @if (post.user._id === currentuserId()) {
                   <button
+                    (click)="isUpdatingPost(post)"
                     class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                   >
                     Edit post
@@ -203,7 +214,10 @@
         <div class="flex items-center gap-3">
           <span class="cursor-pointer hover:underline">{{ post.sharesCount }} shares</span>
           <span class="cursor-pointer hover:underline">{{ post.commentsCount }} comments</span>
-          <button class="font-semibold cursor-pointer text-blue-600 hover:underline">
+          <button
+            class="font-semibold cursor-pointer text-blue-600 hover:underline"
+            [routerLink]="['/details', post._id]"
+          >
             View details
           </button>
         </div>
@@ -214,9 +228,16 @@
       <!-- buttons like - comment - share -->
       <div class="flex items-center justify-between px-1 py-1">
         <button
-          class="flex-1 cursor-pointer flex items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors"
+          [class.text-blue-500]="post.likes.includes(currentuserId())"
+          [class.text-slate-600]="!post.likes.includes(currentuserId())"
+          (click)="switchLike(post._id)"
+          class="flex-1 cursor-pointer flex items-center justify-center gap-2 font-semibold text-[14px] hover:bg-slate-50 py-2 rounded-lg transition-colors"
         >
-          <i class="fa-regular fa-thumbs-up text-lg"></i>
+          <i
+            [class.fa-solid]="post.likes.includes(currentuserId())"
+            [class.fa-regular]="!post.likes.includes(currentuserId())"
+            class="fa-thumbs-up text-lg"
+          ></i>
           Like
         </button>
         <button

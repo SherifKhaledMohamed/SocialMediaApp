@@ -21,4 +21,16 @@ export class PostsService {
   createPost(data: object): Observable<any> {
     return this.httpClient.post(environment.baseUrl + 'posts', data);
   }
+  editPost(postId: string, data: object): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + `posts/${postId}`, data);
+  }
+  switchBookmark(postId: string): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + `posts/${postId}/bookmark`, null);
+  }
+  switchLike(postId: string): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + `posts/${postId}/like`, null);
+  }
+  getUserPosts(userId: string): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + `users/${userId}/posts`);
+  }
 }
