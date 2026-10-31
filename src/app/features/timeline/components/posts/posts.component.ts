@@ -1,7 +1,8 @@
+import { AuthService } from './../../../../core/auth/services/auth.service';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Post, User } from './interfaces/post.interface';
 import { PostsService } from './services/posts.service';
-import { afterNextRender, Component, inject, OnInit, signal, input } from '@angular/core';
+import { afterNextRender, Component, inject, OnInit, signal, input, computed } from '@angular/core';
 import { required, FormField } from '@angular/forms/signals';
 import { CommentComponent } from './components/comment/comment.component';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +17,8 @@ import { RouterLink } from '@angular/router';
 export class PostsComponent implements OnInit {
   private readonly postsService = inject(PostsService);
   private readonly toastrService = inject(ToastrService);
-
+  private readonly authService = inject(AuthService);
+  type = input('');
   allPosts = signal<Post[]>([]);
   currentuser = signal<User>(JSON.parse(localStorage.getItem('user')!) as User);
   currentuserId = signal('');
@@ -34,6 +36,18 @@ export class PostsComponent implements OnInit {
     this.currentuserId.set(JSON.parse(localStorage.getItem('user')!)._id);
     this.getPostsData();
   }
+
+  postsToPreview = computed(() => {
+    const posts = this.allPosts();
+    switch (this.type()) {
+      case 'saved':
+        return posts.filter((post: Post) => post.bookmarked === true);
+      case 'myposts':
+        return posts.filter((post: Post) => post.user._id === this.currentuserId());
+      default:
+        return posts;
+    }
+  });
 
   getPostsData(): void {
     this.postsService.getAllPosts().subscribe({

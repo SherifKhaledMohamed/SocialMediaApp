@@ -1,11 +1,15 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const headerInterceptor: HttpInterceptorFn = (req, next) => {
-  if (localStorage.getItem('token')) {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    const isFormData = req.body instanceof FormData;
+
     req = req.clone({
       setHeaders: {
-        AUTHORIZATION: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': `application/json`,
+        AUTHORIZATION: `Bearer ${token}`,
+        ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       },
     });
   }

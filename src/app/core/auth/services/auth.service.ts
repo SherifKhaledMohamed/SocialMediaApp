@@ -1,7 +1,7 @@
+import { environment } from './../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -30,5 +30,20 @@ export class AuthService {
   }
   changePassword(data: object): Observable<any> {
     return this.httpClient.patch(environment.baseUrl + `users/change-password`, data);
+  }
+  getProfile(): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + 'users/profile-data');
+  }
+  uploadCover(data: FormData): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + 'users/upload-cover', data);
+  }
+  deleteCover(): Observable<any> {
+    return this.httpClient.delete(environment.baseUrl + 'users/cover');
+  }
+  updateProfileImage(data: FormData): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + 'users/upload-photo', data);
+  }
+  getUserPosts(userId: string): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + `users/${userId}/posts`);
   }
 }

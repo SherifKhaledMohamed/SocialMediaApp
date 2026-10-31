@@ -128,7 +128,15 @@
             class="block py-2 px-3 text-gray-600 rounded md:p-1"
             aria-current="page"
           >
-            <i class="fa-regular fa-comment"></i> Notification</a
+            <i class="fa-regular fa-comment relative">
+              @if (notificationsCount()) {
+                <span
+                  class="absolute top-[-50%] right-[-20%] rounded-full w-4 h-4 flex justify-center items-center text-2xs bg-[#ef4444] text-white"
+                  >{{ notificationsCount() }}</span
+                >
+              }
+            </i>
+            Notification</a
           >
         </li>
       </ul>
