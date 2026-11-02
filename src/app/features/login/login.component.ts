@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
           if (res.success) {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
-            this.router.navigate(['/timeline']);
+            this.router.navigate(['/timeline/feed']);
           }
         },
         error: (err) => {

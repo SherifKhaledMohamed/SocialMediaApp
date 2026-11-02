@@ -1,3 +1,4 @@
+import { PostsComponent } from './../timeline/components/posts/posts.component';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { UserProfile } from './models/user-profile.interface';
@@ -7,10 +8,11 @@ import { initFlowbite } from 'flowbite';
 import { PostsService } from '../timeline/components/posts/services/posts.service';
 import { NgClass } from '@angular/common';
 import { Post } from '../timeline/components/posts/interfaces/post.interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass,RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -60,12 +62,9 @@ export class ProfileComponent implements OnInit {
   }
 
   getPostsData(): void {
-    this.postsService.getAllPosts().subscribe({
+    this.postsService.getBookmarks().subscribe({
       next: (res) => {
-        this.allPostsBookmarked.set(res.data.posts.filter((post: any) => post.bookmarked === true));
-      },
-      error: (err) => {
-        console.log(err);
+        this.allPostsBookmarked.set(res.data.bookmarks);
       },
     });
   }

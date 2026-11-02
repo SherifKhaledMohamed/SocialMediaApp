@@ -25,4 +25,7 @@ export class CommentService {
   editComment(postId: string, commentId: string, data: any): Observable<any> {
     return this.httpClient.put(environment.baseUrl + `posts/${postId}/comments/${commentId}`, data);
   }
+  likeUnlikeComment(postId:string, commentId: string): Observable<any> {
+    return this.httpClient.put(environment.baseUrl + `posts/${postId}/comments/${commentId}/like`,null)
+  }
 }

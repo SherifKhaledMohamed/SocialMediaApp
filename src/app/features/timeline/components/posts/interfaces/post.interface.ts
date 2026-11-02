@@ -5,7 +5,7 @@ export interface Post {
   image: string;
   privacy: string;
   user: User;
-  sharedPost: null;
+  sharedPost: Post;
   likes: any[];
   createdAt: Date;
   commentsCount: number;

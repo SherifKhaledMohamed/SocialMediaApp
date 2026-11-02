@@ -2,26 +2,26 @@ import { AuthService } from './../../../../core/auth/services/auth.service';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Post, User } from './interfaces/post.interface';
 import { PostsService } from './services/posts.service';
-import { afterNextRender, Component, inject, OnInit, signal, input, computed } from '@angular/core';
-import { required, FormField } from '@angular/forms/signals';
+import { Component, inject, signal, input, computed, OnChanges} from '@angular/core';
 import { CommentComponent } from './components/comment/comment.component';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-posts',
-  imports: [ReactiveFormsModule, CommentComponent, RouterLink],
+  imports: [ReactiveFormsModule, CommentComponent, RouterLink,DatePipe],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.css',
 })
-export class PostsComponent implements OnInit {
+export class PostsComponent implements OnChanges {
   private readonly postsService = inject(PostsService);
   private readonly toastrService = inject(ToastrService);
   private readonly authService = inject(AuthService);
   type = input('');
   allPosts = signal<Post[]>([]);
   currentuser = signal<User>(JSON.parse(localStorage.getItem('user')!) as User);
-  currentuserId = signal('');
+  currentuserId = signal(this.currentuser()._id);
 
   imgFile = signal<File | null>(null);
   imgSrc = signal('');
@@ -31,33 +31,46 @@ export class PostsComponent implements OnInit {
   isUpdating = signal<boolean>(false);
   loadComments = signal<boolean>(false);
   currentPost = signal<Post | null>(null);
+  homeFeedPosts = signal<Post[]>([]);
+  userPosts = signal<Post[]>([]);
+  bookmarkPosts = signal<Post[]>([]);
 
-  ngOnInit(): void {
-    this.currentuserId.set(JSON.parse(localStorage.getItem('user')!)._id);
+
+
+  ngOnChanges(): void {
     this.getPostsData();
   }
 
+
   postsToPreview = computed(() => {
-    const posts = this.allPosts();
     switch (this.type()) {
       case 'saved':
-        return posts.filter((post: Post) => post.bookmarked === true);
+        return this.bookmarkPosts();
       case 'myposts':
-        return posts.filter((post: Post) => post.user._id === this.currentuserId());
+        return this.userPosts();
+      case 'feed':
+        return this.homeFeedPosts();
       default:
-        return posts;
+        return this.allPosts();
     }
   });
 
   getPostsData(): void {
-    this.postsService.getAllPosts().subscribe({
-      next: (res) => {
-        this.allPosts.set(res.data.posts);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+    switch (this.type()) {
+      case 'saved':
+        this.getBookmarks();
+        break;
+      case 'myposts':
+        this.getUserPosts(this.currentuserId());
+        break;
+      case 'feed':
+        this.getHomeFeedData();
+        break;
+      default:
+        this.postsService.getAllPosts().subscribe({
+          next: (res) => this.allPosts.set(res.data.posts),
+        });
+    }
   }
 
   changePhoto(e: Event) {
@@ -94,9 +107,6 @@ export class PostsComponent implements OnInit {
     this.postsService.createPost(formData).subscribe({
       next: (res) => {
         this.getPostsData();
-      },
-      error: (err) => {
-        console.log(err);
       },
       complete: () => {
         (e.target as HTMLFormElement).reset();
@@ -164,9 +174,6 @@ export class PostsComponent implements OnInit {
       next: (res) => {
         this.getPostsData();
       },
-      error: (err) => {
-        console.log(err);
-      },
       complete: () => {
         this.toastrService.success('Post Deleted Succesfully!', 'Aura Space');
       },
@@ -188,7 +195,21 @@ export class PostsComponent implements OnInit {
     });
   }
 
+  getHomeFeedData(only: string = 'following', limit: number = 10) {
+    this.postsService.getHomeFeed(only, limit).subscribe({
+      next: (res) => this.homeFeedPosts.set(res.data.posts),
+    });
+  }
+
   getUserPosts(userId: string) {
-    this.postsService.getUserPosts(userId).subscribe({});
+    this.postsService.getUserPosts(userId).subscribe({
+      next: (res) => this.userPosts.set(res.data.posts),
+    });
+  }
+
+  getBookmarks() {
+    this.postsService.getBookmarks().subscribe({
+      next: (res) => this.bookmarkPosts.set(res.data.bookmarks),
+    });
   }
 }

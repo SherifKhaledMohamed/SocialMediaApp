@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Toast } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forget-password',
-  imports: [],
+  imports: [RouterLink, Toast],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })
-export class ForgetPasswordComponent {}
+export class ForgetPasswordComponent {
+
+}

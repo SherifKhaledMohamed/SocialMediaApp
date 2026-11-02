@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Observable } from 'rxjs';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,11 @@ export class PostsService {
   }
   getUserPosts(userId: string): Observable<any> {
     return this.httpClient.get(environment.baseUrl + `users/${userId}/posts`);
+  }
+  getBookmarks(): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + 'users/bookmarks');
+  }
+  getHomeFeed(only:string='following',limit:number = 10): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + `posts/feed?only=${only}&limit=${limit}`)
   }
 }

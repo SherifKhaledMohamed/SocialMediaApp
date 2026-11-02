@@ -8,11 +8,12 @@ import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { Comment } from './comment.interface';
 
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-comment',
 
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,DatePipe],
 
   templateUrl: './comment.component.html',
 
@@ -49,10 +50,6 @@ export class CommentComponent implements OnInit {
     this.commentService.getAllComments(this.postId()).subscribe({
       next: (res) => {
         this.allComments.set(res.data.comments);
-      },
-
-      error(err) {
-        console.log(err);
       },
     });
   }
@@ -177,5 +174,13 @@ export class CommentComponent implements OnInit {
     this.currentComment.set(comment);
 
     this.setCommentData(comment);
+  }
+
+  likeUnlikeComment(postId:string, commentId:string) {
+    this.commentService.likeUnlikeComment(postId,commentId).subscribe({
+      next: (res) => {
+        this.getAllComments();
+      }
+    });
   }
 }

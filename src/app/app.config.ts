@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import {
   provideRouter,
   withHashLocation,
@@ -11,6 +11,8 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { headerInterceptor } from './core/interceptors/header-interceptor';
 import { errorInterceptor } from './core/interceptors/error-interceptor';
 import { provideToastr } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { loadingInterceptor } from './core/interceptors/loading-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,6 +24,7 @@ export const appConfig: ApplicationConfig = {
       withHashLocation(),
     ),
     provideToastr(),
-    provideHttpClient(withFetch(), withInterceptors([headerInterceptor, errorInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([headerInterceptor, errorInterceptor,loadingInterceptor])),
+    importProvidersFrom(NgxSpinnerModule),
   ],
 };

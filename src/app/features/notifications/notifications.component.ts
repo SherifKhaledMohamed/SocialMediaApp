@@ -1,11 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { NotificationsService } from './services/notifications.service';
 import { Notification, Entity, Recipient } from './models/notification.interface';
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-notifications',
-  imports: [NgClass],
+  imports: [NgClass, RouterLink,DatePipe],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
 })
@@ -30,7 +31,6 @@ export class NotificationsComponent implements OnInit {
   getAllNotifications(): void {
     this.notificationsService.getNotifications().subscribe({
       next: (res) => {
-        console.log(res.data.notifications);
         this.allNotifications.set(res.data.notifications);
       },
       complete: () => {},
