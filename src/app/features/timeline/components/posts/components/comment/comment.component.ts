@@ -9,11 +9,12 @@ import { Comment } from './comment.interface';
 
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { ElapsedDatePipe } from '../../../../../../shared/pipes/elapsed-date-pipe';
 
 @Component({
   selector: 'app-comment',
 
-  imports: [ReactiveFormsModule,DatePipe],
+  imports: [ReactiveFormsModule,ElapsedDatePipe],
 
   templateUrl: './comment.component.html',
 

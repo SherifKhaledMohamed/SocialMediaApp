@@ -4,7 +4,7 @@ import { Toast } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forget-password',
-  imports: [RouterLink, Toast],
+  imports: [RouterLink],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })

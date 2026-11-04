@@ -6,10 +6,11 @@ import { CommentComponent } from '../timeline/components/posts/components/commen
 import { SideRightComponent } from '../timeline/components/side-right/side-right.component';
 import { share } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { ElapsedDatePipe } from '../../shared/pipes/elapsed-date-pipe';
 
 @Component({
   selector: 'app-details',
-  imports: [CommentComponent, SideRightComponent, RouterLink,DatePipe],
+  imports: [CommentComponent, SideRightComponent, RouterLink,ElapsedDatePipe],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })

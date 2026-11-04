@@ -27,7 +27,7 @@
 
           <span>&middot;</span>
 
-          <span>{{ comment.createdAt | date}}</span>
+          <span>{{ comment.createdAt | elapsedDate}}</span>
         </div>
 
         @if (comment.content) {
@@ -42,7 +42,7 @@
       </div>
 
       <div class="flex items-center gap-3 mt-1 ml-2 text-[12px] text-slate-500 font-semibold">
-        <span class="cursor-pointer hover:underline">{{ comment.createdAt | date }}</span>
+        <span class="cursor-pointer hover:underline">{{ comment.createdAt | elapsedDate }}</span>
 
         <button (click)="likeUnlikeComment(postId(),comment._id)" class="cursor-pointer hover:underline"
           [class.text-red-400]="comment.likes.includes(signedUser._id)">Like ({{
@@ -74,6 +74,10 @@
       </div>
     </div>
   </div>
+  }
+  @empty {
+
+  <span class="text-sm bg-slate-100 rounded-2xl rounded-tl-none px-3.5 py-2.5 max-w-full">No comments here yet!</span>
   }
 
   <!-- Create Comments  -->
@@ -115,7 +119,7 @@
         </div>
 
         <button type="submit"
-          class="w-8 cursor-pointer h-8 rounded-full bg-blue-400 hover:bg-blue-500 text-white flex items-center justify-center transition-colors">
+          class="w-8 cursor-pointer h-8 rounded-full bg-blue-400 hover:bg-blue-500 text-white flex items-center justify-center transition-colors mt-2">
           <i class="fa-solid fa-paper-plane text-[13px] ms-1 mt-.5"></i>
         </button>
 

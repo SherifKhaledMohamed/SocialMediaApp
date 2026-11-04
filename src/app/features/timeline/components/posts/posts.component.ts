@@ -7,10 +7,11 @@ import { CommentComponent } from './components/comment/comment.component';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { ElapsedDatePipe } from '../../../../shared/pipes/elapsed-date-pipe';
 
 @Component({
   selector: 'app-posts',
-  imports: [ReactiveFormsModule, CommentComponent, RouterLink,DatePipe],
+  imports: [ReactiveFormsModule, CommentComponent, RouterLink,ElapsedDatePipe],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.css',
 })

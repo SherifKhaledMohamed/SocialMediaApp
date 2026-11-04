@@ -1,12 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { NotificationsService } from './services/notifications.service';
 import { Notification, Entity, Recipient } from './models/notification.interface';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ElapsedDatePipe } from '../../shared/pipes/elapsed-date-pipe';
 
 @Component({
   selector: 'app-notifications',
-  imports: [NgClass, RouterLink,DatePipe],
+  imports: [ RouterLink,ElapsedDatePipe],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
 })
@@ -15,18 +16,13 @@ export class NotificationsComponent implements OnInit {
 
   allNotifications = signal<Notification[]>([]);
   notifType = signal<string>('all');
-  unreadCount = signal<number>(0);
+  unreadCount = this.notificationsService.unreadCount;
   ngOnInit(): void {
     this.getAllNotifications();
   }
 
   getUnreadNotificationsCount(): void {
-    this.notificationsService.getUnreadCount().subscribe({
-      next: (res) => {
-        this.unreadCount.set(res.data.unreadCount);
-      },
-      complete: () => {},
-    });
+    this.notificationsService.getUnreadCount().subscribe();
   }
   getAllNotifications(): void {
     this.notificationsService.getNotifications().subscribe({

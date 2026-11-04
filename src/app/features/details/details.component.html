@@ -15,7 +15,7 @@
                 <div class="flex items-center text-[13px] text-slate-500 mt-0.5 gap-1">
                   <span class="hover:underline cursor-pointer">{{ postData().user.username }}</span>
                   <span>&middot;</span>
-                  <span class="hover:underline cursor-pointer">{{ postData().createdAt | date }}</span>
+                  <span class="hover:underline cursor-pointer">{{ postData().createdAt | elapsedDate }}</span>
                   <span>&middot;</span>
 
                   <div

@@ -20,7 +20,7 @@
 
   <div [class.hidden]="hideShow()" [class.lg:block]="hideShow()" class="gap-3 overflow-y-auto max-h-88 pb-1">
     @for (friend of friendSuggestions() | search : searchText(); track friend._id) {
-    <div class="p-3 border border-slate-200 rounded-2xl bg-white hover:border-slate-300 transition-colors">
+    <div class="p-3 border border-slate-200 rounded-2xl bg-white hover:border-slate-300 transition-colors mb-3">
       <div class="flex items-start gap-3">
         <img [src]="friend.photo" [alt]="friend.name"
           class="w-11 h-11 rounded-full object-cover shrink-0 bg-slate-100 border border-slate-50" />
@@ -51,6 +51,11 @@
         </div>
       </div>
     </div>
+    }
+    @empty {
+    <span class="p-3 border border-slate-200 rounded-2xl bg-white hover:border-slate-300 transition-colors mb-3">No
+      Friends
+      Suggesstions Yet!</span>
     }
   </div>
 

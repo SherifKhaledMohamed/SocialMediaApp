@@ -6,13 +6,13 @@ import { ToastrService } from 'ngx-toastr';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
 import { PostsService } from '../timeline/components/posts/services/posts.service';
-import { NgClass } from '@angular/common';
 import { Post } from '../timeline/components/posts/interfaces/post.interface';
 import { RouterLink } from '@angular/router';
+import { ElapsedDatePipe } from '../../shared/pipes/elapsed-date-pipe';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, NgClass,RouterLink],
+  imports: [ReactiveFormsModule,RouterLink,ElapsedDatePipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })

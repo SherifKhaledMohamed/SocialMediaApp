@@ -57,7 +57,6 @@
     </div>
   </form>
 
-  @if (postsToPreview().length > 0) {
   @for (post of postsToPreview(); track post._id) {
   <div class="bg-white rounded-[16px] my-3 shadow-sm border border-slate-200 p-4 font-sans">
     <!-- user details  -->
@@ -72,7 +71,7 @@
           <div class="flex items-center text-[13px] text-slate-500 mt-0.5 gap-1">
             <span class="hover:underline cursor-pointer">{{ post.user.username }}</span>
             <span>&middot;</span>
-            <span class="hover:underline cursor-pointer">{{ post.createdAt | date}}</span>
+            <span class="hover:underline cursor-pointer">{{ post.createdAt | elapsedDate}}</span>
             <span>&middot;</span>
 
             <div
@@ -226,8 +225,8 @@
     <app-comment [postId]="post._id"></app-comment>
     }
   </div>
-  }
-  } @else {
+
+  } @empty {
   <p class="rounded-xl border border-slate-200 bg-slate-50 p-4 mt-4 text-sm text-slate-500">
     No posts to preview yet.
   </p>

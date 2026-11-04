@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit {
   private readonly notificationsService = inject(NotificationsService);
 
   currentUser = signal<User>({} as User);
-  notificationsCount = signal<Number>(0);
+  notificationsCount = this.notificationsService.unreadCount;
 
   logOut(): void {
     this.authService.signOut();
@@ -30,11 +30,6 @@ export class NavbarComponent implements OnInit {
   }
 
   getNotificationsCount(): void {
-    this.notificationsService.getUnreadCount().subscribe({
-      next: (res) => {
-        this.notificationsCount.set(res.data.unreadCount);
-      },
-      complete: () => {},
-    });
+    this.notificationsService.getUnreadCount().subscribe();
   }
 }
